@@ -9,6 +9,11 @@ Install requirements:
 $ python -m pip install -r requirements.txt
 ```
 
+Clone repository:
+```bash
+$ git clone --depth 1 https://github.com/AlekseyLapunov/rdgen-cli
+```
+
 Help page:
 ```bash
 $ python rdgen_cli.py --help
