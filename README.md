@@ -12,6 +12,8 @@ $ python -m pip install -r requirements.txt
 Clone repository:
 ```bash
 $ git clone --depth 1 https://github.com/AlekseyLapunov/rdgen-cli
+
+$ cd rdgen-cli
 ```
 
 Help page:
