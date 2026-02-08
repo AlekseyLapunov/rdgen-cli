@@ -206,8 +206,7 @@ def downloadFiles(links: list[str], path, verbose) -> int:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
 
-            if verbose:
-                print(f"\r{preamble} File saved locally: {filename}")
+            print(f"\r{preamble} File saved locally: {filename}")
 
             successCount += 1
             
@@ -354,6 +353,9 @@ def main():
 
     if downloadLinks is None:
         fatal("Problem getting download links")
+
+    if not dontFlushStatusLog:
+        print("")
 
     print("Build complete! Result download links:")
     printBulletPoints(downloadLinks)
