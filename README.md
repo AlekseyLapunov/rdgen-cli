@@ -40,7 +40,7 @@ $ python rdgen_cli.py -v -f my_config.json -s https://rdgen.crayoneater.org
 
 # Notice
 
-Although you can specify **custom port** and **basic authorization data** in this tool, it won't work with vanilla [rdgen](https://github.com/bryangerlach/rdgen) as of now. But it's should be easy to modify [rdgen](https://github.com/bryangerlach/rdgen) Actions pipelines to enable such functionality.
+Although you can specify **custom port** and **basic authorization data** in this tool, it won't work with vanilla [rdgen](https://github.com/bryangerlach/rdgen) as of now. But it should be easy to modify [rdgen](https://github.com/bryangerlach/rdgen) Actions pipelines to enable such functionality.
 
 # Versions
 
