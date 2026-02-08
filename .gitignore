@@ -1,0 +1,4 @@
+*.json
+!template.json
+downloads/
+*.ignored.*
