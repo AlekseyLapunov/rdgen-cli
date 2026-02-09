@@ -6,19 +6,18 @@ Generate custom RustDesk clients via command interface instead of using web brow
 
 Install requirements:
 ```bash
-$ python -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 Clone repository:
 ```bash
-$ git clone --depth 1 https://github.com/AlekseyLapunov/rdgen-cli
+git clone --depth 1 https://github.com/AlekseyLapunov/rdgen-cli
 
-$ cd rdgen-cli
+cd rdgen-cli
 ```
 
 Help page:
 ```bash
-$ python rdgen_cli.py --help
 usage: rdgen_cli.py [-h] -f FILE -s SERVER [-v] [-p] [-d]
 
 options:
@@ -33,11 +32,11 @@ options:
 
 Example:
 ```bash
-$ cp template.json my_config.json
+cp template.json my_config.json
 
 # ... making changes to my_config.json ...
 
-$ python rdgen_cli.py -v -f my_config.json -s https://rdgen.crayoneater.org
+python rdgen_cli.py -v -f my_config.json -s https://rdgen.crayoneater.org
 ```
 
 # Notice
