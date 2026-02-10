@@ -271,7 +271,7 @@ def main():
 
     if verbose:
         print("rdgen address information:")
-        printBulletPoints([f"Domain: {domain}", f"Port: {port}", f"Scheme: {scheme}", f"Login: {login or "<absent>"}", f"Password: <{"supplied" if login else "absent"}>"])
+        printBulletPoints([f"Domain: {domain}", f"Port: {port}", f"Scheme: {scheme}", f"Login: {login or '<absent>'}", f"Password: <{'supplied' if login else 'absent'}>"])
 
     portStr = f":{port}" if port != PORT_HTTPS and port != PORT_HTTP else ""
     rdgenBaseUrl = f"{scheme}://{domain}{portStr}"
