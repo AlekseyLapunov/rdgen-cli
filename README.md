@@ -8,6 +8,14 @@ Install requirements:
 ```bash
 python -m pip install -r requirements.txt
 ```
+or (for externally-managed-environment)
+```bash
+# Debian-based:
+apt install python3-requests
+
+# RHEL-based:
+dnf install python3-requests
+```
 
 Clone repository:
 ```bash
@@ -41,10 +49,11 @@ python rdgen_cli.py -v -f my_config.json -s https://rdgen.crayoneater.org
 
 # Notice
 
-Although you can specify **custom port** and **basic authorization data** in this tool, it won't work with vanilla [rdgen](https://github.com/bryangerlach/rdgen) as of now. But it should be easy to modify [rdgen](https://github.com/bryangerlach/rdgen) Actions pipelines to enable such functionality.
+Although you can specify custom port and basic authorization data in this tool, it won't work with vanilla [rdgen](https://github.com/bryangerlach/rdgen) as of now. But it should be easy to modify [rdgen](https://github.com/bryangerlach/rdgen) Actions pipelines to enable such functionality.
 
 # Versions
 
 Tested with:
-- Python: 3.13.5
-- `requests`: 2.32.5
+- Python: 3.11.2, 3.13.5;
+- `requests`: 2.28.1, 2.32.5;
+- OS: Debian 12 (Bookworm), Windows 11.
