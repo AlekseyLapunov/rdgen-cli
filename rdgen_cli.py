@@ -79,7 +79,7 @@ def tryRequest(method, url, body = None, auth = None, bodyDataType = BODY_DATA_A
 
     return response
 
-def parseArguments() -> tuple[str, str]:
+def parseArguments():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-f", "--file",   required=True, help="Input configuration file (JSON)")
