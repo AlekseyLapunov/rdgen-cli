@@ -172,6 +172,7 @@ def getResultDownloadLinks(baseUrl, filename, platform, uuid):
         downloadLinks.append(f"{common}filename={filename}-x86_64.dmg&uuid={uuid}")
         downloadLinks.append(f"{common}filename={filename}-aarch64.dmg&uuid={uuid}")
     else:
+        print(f"Unexpected platform: {platform}")
         return None
     
     return downloadLinks
@@ -297,7 +298,16 @@ def main():
     if verbose:
         print("Initial build stage info:")
         printBulletPoints([f"File name: {filename}", f"UUID: {uuid}", f"Platform: {platform}", f"Stage: {stageInfo}"])
+        print("Evaluating download links...")
+    
+    downloadLinks = getResultDownloadLinks(rdgenBaseUrl, filename, platform, uuid)
 
+    if downloadLinks is None:
+        fatal("Problem getting download links")
+
+    print("Printing download links up-front. The result will be accessible as soon as the build is done:")
+    printBulletPoints(downloadLinks)    
+    
     print(f"Build initiated. Checking status every {CHECK_STATUS_TIMEOUT_SEC} seconds...")
 
     elapsedSeconds = 0
@@ -348,11 +358,6 @@ def main():
 
         if elapsedSeconds >= MAX_TIME_CHECKING_SEC:
             fatal("Waiting for too long. Something might be wrong, need to check GitHub Action manually")
-
-    downloadLinks = getResultDownloadLinks(rdgenBaseUrl, filename, platform, uuid)
-
-    if downloadLinks is None:
-        fatal("Problem getting download links")
 
     if not dontFlushStatusLog:
         print("")
