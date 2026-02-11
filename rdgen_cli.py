@@ -84,6 +84,8 @@ def parseArguments():
 
     parser.add_argument("-f", "--file",   required=True, help="Input configuration file (JSON)")
     parser.add_argument("-s", "--server", required=True, help="Address of rdgen server. HTTP (:80) is the default scheme")
+    parser.add_argument("--set-version", help="Override the 'version' key in the configuration JSON")
+    parser.add_argument("--set-platform", help="Override the 'platform' key in the configuration JSON")
 
     parser.add_argument("-v", "--verbose",          action="store_true", help="Increase output verbosity")
     parser.add_argument("-p", "--preserve-log",     action="store_true", help="Preserve build status log")
@@ -91,7 +93,7 @@ def parseArguments():
 
     args = parser.parse_args()
 
-    return args.file, args.server, args.verbose, args.preserve_log, args.disable_download
+    return args.file, args.server, args.verbose, args.preserve_log, args.disable_download, args.set_version, args.set_platform
 
 def parseBuildStageInfo(html):
     resultStatus = reBuildStatus.search(html)
@@ -234,7 +236,7 @@ def fatal(msg):
     exit(-1)
 
 def main():
-    confFile, rdgenAddress, verbose, dontFlushStatusLog, dontDownloadResult = parseArguments()
+    confFile, rdgenAddress, verbose, dontFlushStatusLog, dontDownloadResult, setVersion, setPlatform = parseArguments()
 
     if verbose:
         if dontFlushStatusLog:
@@ -263,6 +265,16 @@ def main():
         fatal(f"Problem unmarhalling the JSON configuration: {e}")
 
     print("Configuration JSON parsed successfully!")
+
+    if setVersion:
+        confObj['version'] = setVersion
+        if verbose:
+            print(f"Overriding version to: {confObj['version']}")
+
+    if setPlatform:
+        confObj['platform'] = setPlatform
+        if verbose:
+            print(f"Overriding platform to: {confObj['platform']}")
 
     login, password, domain, port, scheme = parseAddress(rdgenAddress)
 
