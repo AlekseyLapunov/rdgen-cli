@@ -22,6 +22,8 @@ PORT_HTTPS = 443
 BUILD_GENERATING = "generating"
 BUILD_GENERATED  = "generated"
 
+AVAILABLE_PLATFORMS_CONF = ["windows", "windows-x86", "linux", "android", "macos"]
+
 RE_PATTERN_BUILD_STATUS   = r'<span id="statusText">(.*?)<\/span>'
 RE_PATTERN_CHECK_FOR_FILE = r"window\.location\.replace\('\/check_for_file\?(.*)'\);"
 RE_PATTERN_PAGE_TITLE     = r'<title id="pageTitle">(.*)<\/title>'
@@ -272,7 +274,13 @@ def main():
             print(f"Overriding version to: {confObj['version']}")
 
     if setPlatform:
+        if setPlatform not in AVAILABLE_PLATFORMS_CONF:
+            print("Supported platform values for configuration:")
+            printBulletPoints(AVAILABLE_PLATFORMS_CONF)
+            fatal(f"Platform '{setPlatform}' not in the supported platforms list")
+
         confObj['platform'] = setPlatform
+        
         if verbose:
             print(f"Overriding platform to: {confObj['platform']}")
 
