@@ -228,7 +228,7 @@ def formatResponse(response: requests.Response) -> str:
 
 def printBulletPoints(bulletPoints):
     for bp in bulletPoints:
-        print(f"\t- {bp}")
+        print(f"{' '*4}- {bp}")
 
 def isHttpSuccess(code) -> bool:
     return code >= 200 and code <= 299 
