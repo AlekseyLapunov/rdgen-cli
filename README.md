@@ -26,12 +26,17 @@ cd rdgen-cli
 
 Help page:
 ```bash
-usage: rdgen_cli.py [-h] -f FILE -s SERVER [-v] [-p] [-d]
+usage: rdgen_cli.py [-h] -f FILE -s SERVER [--set-version SET_VERSION] [--set-platform SET_PLATFORM] [-v] [-p] [-d]
 
 options:
   -h, --help            show this help message and exit
-  -f, --file FILE       Input configuration file (JSON)
-  -s, --server SERVER   Address of rdgen server. HTTP (:80) is the default scheme
+  -f FILE, --file FILE  Input configuration file (JSON)
+  -s SERVER, --server SERVER
+                        Address of rdgen server. HTTP (:80) is the default scheme
+  --set-version SET_VERSION
+                        Override the 'version' key in the configuration JSON
+  --set-platform SET_PLATFORM
+                        Override the 'platform' key in the configuration JSON
   -v, --verbose         Increase output verbosity
   -p, --preserve-log    Preserve build status log
   -d, --disable-download
