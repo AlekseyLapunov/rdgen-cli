@@ -153,7 +153,7 @@ def getResultDownloadLinks(baseUrl, filename, platform, uuid):
     if platform == 'windows':
         downloadLinks.append(f"{common}filename={filename}.exe&uuid={uuid}")
         downloadLinks.append(f"{common}filename={filename}.msi&uuid={uuid}")
-    elif platform == 'windows-86':
+    elif platform == 'windows-x86':
         downloadLinks.append(f"{common}filename={filename}.exe&uuid={uuid}")
     elif platform == 'linux':
         downloadLinks.append(f"{common}filename={filename}-x86_64.deb&uuid={uuid}")
