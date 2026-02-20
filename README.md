@@ -1,4 +1,4 @@
-# CLI tool for [rdgen](https://github.com/bryangerlach/rdgen)
+# CLI tool for [RDGen](https://github.com/bryangerlach/rdgen)
 
 Generate custom RustDesk clients via command interface instead of using web browser.
 
@@ -9,7 +9,7 @@ usage: rdgen_cli.py [-h] -f FILE -s SERVER [--set-version SET_VERSION] [--set-pl
 options:
   -h, --help                   show this help message and exit
   -f FILE, --file FILE         Input configuration file (JSON)
-  -s SERVER, --server SERVER   Address of rdgen server. HTTP (:80) is the default scheme
+  -s SERVER, --server SERVER   Address of RDGen server. HTTP (:80) is the default scheme
   --set-version SET_VERSION    Override the 'version' key in the configuration JSON
   --set-platform SET_PLATFORM  Override the 'platform' key in the configuration JSON
   -v, --verbose                Increase output verbosity
@@ -54,6 +54,10 @@ cp template.json my_config.json
 python rdgen_cli.py -v -f my_config.json -s https://rdgen.crayoneater.org
 ```
 
+# Kudos
+
+Special thanks to [bryangerlach](https://github.com/bryangerlach) for creating the awesome [RDGen](https://github.com/bryangerlach/rdgen) service and contributing to this CLI tool in particular.
+
 # Notice
 
-Although you can specify custom port and basic authorization data in this tool, it won't work with vanilla [rdgen](https://github.com/bryangerlach/rdgen) as of now. But it should be easy to modify [rdgen](https://github.com/bryangerlach/rdgen) Actions pipelines to enable such functionality.
+Although you can specify custom port and basic authorization data in this tool, it won't work with vanilla [RDGen](https://github.com/bryangerlach/rdgen) as of now. But it should be easy to modify [RDGen](https://github.com/bryangerlach/rdgen) Actions pipelines to enable such functionality.
