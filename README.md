@@ -19,9 +19,9 @@ options:
 
 # Usage (executable)
 
-1. Download executable file from releases.
-2. Obtain configuration JSON file (you can download 'template.json' from this repository or download from RDGen web-page)
-3. Open terminal and run the executable with the flags specified in the help page above.
+1. Download executable file from the [Releases](https://github.com/AlekseyLapunov/rdgen-cli/releases) page.
+2. Obtain configuration JSON file. You can download the [template.json](https://raw.githubusercontent.com/AlekseyLapunov/rdgen-cli/refs/heads/main/template.json) from this repository or download it from RDGen web-page.
+3. Open a terminal and run the executable with the flags specified in the help page above.
 
 # Usage (python interpreter)
 
