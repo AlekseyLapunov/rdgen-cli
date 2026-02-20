@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import sys
 from urllib.parse import urlparse
 import requests
 import re
@@ -235,7 +236,7 @@ def isHttpSuccess(code) -> bool:
 
 def fatal(msg):
     print(f"! {msg}; Terminating.")
-    exit(-1)
+    sys.exit(-1)
 
 def main():
     confFile, rdgenAddress, verbose, dontFlushStatusLog, dontDownloadResult, setVersion, setPlatform = parseArguments()
@@ -387,7 +388,7 @@ def main():
 
     if dontDownloadResult:
         print("Automatic result downloading was disabled. Use provided links to download manually")
-        exit(0)
+        sys.exit(0)
 
     savePath = f"{LOCAL_DOWNLOADS_DIR}/{filename}_{uuid}"
 
