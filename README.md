@@ -23,6 +23,13 @@ options:
 2. Obtain configuration JSON file. You can download the [template.json](https://raw.githubusercontent.com/AlekseyLapunov/rdgen-cli/refs/heads/main/template.json) from this repository or download it from RDGen web-page.
 3. Open a terminal and run the executable with the flags specified in the help page above.
 
+Example run:
+```
+chmod +x rdgen-cli-linux-x64
+
+rdgen-cli-linux-x64 -f my_config.json -s https://rdgen.crayoneater.org
+```
+
 # Usage (python interpreter)
 
 Install requirements:
