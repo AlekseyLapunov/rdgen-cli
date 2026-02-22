@@ -27,7 +27,7 @@ Example run:
 ```
 chmod +x rdgen-cli-linux-x64
 
-rdgen-cli-linux-x64 -f my_config.json -s https://rdgen.crayoneater.org
+./rdgen-cli-linux-x64 -f my_config.json -s https://rdgen.crayoneater.org
 ```
 
 # Usage (python interpreter)
