@@ -326,6 +326,10 @@ def main():
     if downloadLinks is None:
         fatal("Problem getting download links")
 
+    checkForFileUrl = f"{rdgenBaseUrl}/check_for_file?filename={filename}&uuid={uuid}&platform={platform}"
+
+    print(f"Web-page link: {checkForFileUrl}")
+
     print("Printing download links up-front. The result will be accessible as soon as the build is done:")
     printBulletPoints(downloadLinks)    
     
@@ -336,7 +340,7 @@ def main():
     maxLen = 1
 
     while True:
-        response = tryRequest("GET", f"{rdgenBaseUrl}/check_for_file?filename={filename}&uuid={uuid}&platform={platform}", auth=basicAuth)
+        response = tryRequest("GET", checkForFileUrl, auth=basicAuth)
 
         if not isHttpSuccess(response.status_code):
             fatal("Response was not successful from rdgen server")
