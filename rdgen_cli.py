@@ -13,6 +13,10 @@ MAX_TIME_CHECKING_SEC    = 7200
 LOCAL_DOWNLOADS_DIR  = "downloads"
 
 MAX_REQUEST_TRIES = 5
+MAX_POLL_RETRIES  = 3      # Retries for transient failures during status polling
+POLL_RETRY_DELAY  = 30     # Seconds to wait between poll retries
+MAX_DOWNLOAD_RETRIES = 3   # Retries for individual file downloads
+DOWNLOAD_RETRY_DELAY = 15  # Seconds to wait between download retries
 
 BODY_DATA_AS_FORM = "form"
 BODY_DATA_AS_JSON = "json"
@@ -93,10 +97,11 @@ def parseArguments():
     parser.add_argument("-v", "--verbose",          action="store_true", help="Increase output verbosity")
     parser.add_argument("-p", "--preserve-log",     action="store_true", help="Preserve build status log")
     parser.add_argument("-d", "--disable-download", action="store_true", help="Disable automatic result download")
+    parser.add_argument("--allow-partial",          action="store_true", help="Exit successfully even if some downloads fail (e.g. mac x86_64)")
 
     args = parser.parse_args()
 
-    return args.file, args.server, args.verbose, args.preserve_log, args.disable_download, args.set_version, args.set_platform
+    return args.file, args.server, args.verbose, args.preserve_log, args.disable_download, args.set_version, args.set_platform, args.allow_partial
 
 def parseBuildStageInfo(html):
     resultStatus = reBuildStatus.search(html)
@@ -205,19 +210,34 @@ def downloadFiles(links: list[str], path, verbose) -> int:
                 maxLen = max(maxLen, len(output))
                 print(output, end=" "*(maxLen - len(output)), flush=True)
             
-            response = requests.get(link, stream=True)
-            response.raise_for_status()
+            # Retry logic for individual file downloads
+            downloaded = False
+            for attempt in range(1, MAX_DOWNLOAD_RETRIES + 1):
+                try:
+                    response = requests.get(link, stream=True)
+                    response.raise_for_status()
 
-            with open(f"{path}/{filename}", 'wb') as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
+                    with open(f"{path}/{filename}", 'wb') as f:
+                        for chunk in response.iter_content(chunk_size=8192):
+                            f.write(chunk)
 
-            print(f"\r{preamble} File saved locally: {filename}")
+                    print(f"\r{preamble} File saved locally: {filename}")
+                    downloaded = True
+                    break
 
-            successCount += 1
+                except requests.exceptions.RequestException as e:
+                    if attempt < MAX_DOWNLOAD_RETRIES:
+                        print(f"\r{preamble} Download attempt {attempt}/{MAX_DOWNLOAD_RETRIES} failed: {e}")
+                        print(f"{preamble} Retrying in {DOWNLOAD_RETRY_DELAY}s...")
+                        time.sleep(DOWNLOAD_RETRY_DELAY)
+                    else:
+                        print(f"Error downloading {link}: {e} (all {MAX_DOWNLOAD_RETRIES} attempts failed)")
+
+            if downloaded:
+                successCount += 1
             
-        except requests.exceptions.RequestException as e:
-            print(f"Error downloading {link}: {e}")
+        except Exception as e:
+            print(f"Error processing download link {link}: {e}")
             continue
         
         idx += 1
@@ -239,7 +259,7 @@ def fatal(msg):
     sys.exit(-1)
 
 def main():
-    confFile, rdgenAddress, verbose, dontFlushStatusLog, dontDownloadResult, setVersion, setPlatform = parseArguments()
+    confFile, rdgenAddress, verbose, dontFlushStatusLog, dontDownloadResult, setVersion, setPlatform, allowPartial = parseArguments()
 
     if verbose:
         if dontFlushStatusLog:
@@ -326,10 +346,6 @@ def main():
     if downloadLinks is None:
         fatal("Problem getting download links")
 
-    checkForFileUrl = f"{rdgenBaseUrl}/check_for_file?filename={filename}&uuid={uuid}&platform={platform}"
-
-    print(f"Web-page link: {checkForFileUrl}")
-
     print("Printing download links up-front. The result will be accessible as soon as the build is done:")
     printBulletPoints(downloadLinks)    
     
@@ -339,11 +355,29 @@ def main():
 
     maxLen = 1
 
-    while True:
-        response = tryRequest("GET", checkForFileUrl, auth=basicAuth)
+    pollFailures = 0  # Track consecutive poll failures
 
-        if not isHttpSuccess(response.status_code):
-            fatal("Response was not successful from rdgen server")
+    while True:
+        response = tryRequest("GET", f"{rdgenBaseUrl}/check_for_file?filename={filename}&uuid={uuid}&platform={platform}", auth=basicAuth)
+
+        # Handle transient poll failures with retry
+        if response is None or not isHttpSuccess(response.status_code):
+            pollFailures += 1
+            if response is not None:
+                reason = f"HTTP {response.status_code}"
+            else:
+                reason = "Connection failed"
+
+            if pollFailures >= MAX_POLL_RETRIES:
+                fatal(f"Response was not successful from rdgen server ({reason}, {pollFailures} consecutive failures)")
+            
+            print(f"⚠ Poll failed ({reason}), retry {pollFailures}/{MAX_POLL_RETRIES} in {POLL_RETRY_DELAY}s...")
+            time.sleep(POLL_RETRY_DELAY)
+            elapsedSeconds += POLL_RETRY_DELAY
+            continue
+        
+        # Reset failure counter on success
+        pollFailures = 0
 
         pageTitle = getPageTitle(response.text)
 
@@ -414,7 +448,10 @@ def main():
         fatal(f"No files were downloaded {postamble}")
 
     if downloadedCount != filesToDownload:
-        fatal(f"Not all files have been downloaded {postamble}")
+        if allowPartial:
+            print(f"⚠ Not all files were downloaded {postamble}, continuing with partial results (--allow-partial)")
+        else:
+            fatal(f"Not all files have been downloaded {postamble}")
     
     print(f"Build result files downloaded locally: {savePath}")
     
