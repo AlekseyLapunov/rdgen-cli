@@ -12,7 +12,7 @@ MAX_TIME_CHECKING_SEC    = 7200
 
 LOCAL_DOWNLOADS_DIR  = "downloads"
 
-MAX_REQUEST_TRIES = 5
+MAX_REQUEST_TRIES = 5      # Retries for main requests (generator start and status polling)
 MAX_POLL_RETRIES  = 3      # Retries for transient failures during status polling
 POLL_RETRY_DELAY  = 30     # Seconds to wait between poll retries
 MAX_DOWNLOAD_RETRIES = 3   # Retries for individual file downloads
@@ -210,7 +210,6 @@ def downloadFiles(links: list[str], path, verbose) -> int:
                 maxLen = max(maxLen, len(output))
                 print(output, end=" "*(maxLen - len(output)), flush=True)
             
-            # Retry logic for individual file downloads
             downloaded = False
             for attempt in range(1, MAX_DOWNLOAD_RETRIES + 1):
                 try:
@@ -359,12 +358,11 @@ def main():
 
     maxLen = 1
 
-    pollFailures = 0  # Track consecutive poll failures
+    pollFailures = 0
 
     while True:
         response = tryRequest("GET", checkForFileUrl, auth=basicAuth)
 
-        # Handle transient poll failures with retry
         if response is None or not isHttpSuccess(response.status_code):
             pollFailures += 1
             if response is not None:
@@ -380,7 +378,6 @@ def main():
             elapsedSeconds += POLL_RETRY_DELAY
             continue
         
-        # Reset failure counter on success
         pollFailures = 0
 
         pageTitle = getPageTitle(response.text)
