@@ -4,7 +4,7 @@ Generate custom RustDesk clients via command interface instead of using web brow
 
 Help page:
 ```bash
-usage: rdgen_cli.py [-h] -f FILE -s SERVER [--set-version SET_VERSION] [--set-platform SET_PLATFORM] [-v] [-p] [-d]
+usage: rdgen_cli.py [-h] -f FILE -s SERVER [--set-version SET_VERSION] [--set-platform SET_PLATFORM] [-v] [-p] [-d] [--allow-partial]
 
 options:
   -h, --help                   show this help message and exit
@@ -15,6 +15,7 @@ options:
   -v, --verbose                Increase output verbosity
   -p, --preserve-log           Preserve build status log
   -d, --disable-download       Disable automatic result download
+  --allow-partial              Exit successfully even if some downloads fail (e.g. mac x86_64)
 ```
 
 # Usage (executable)
