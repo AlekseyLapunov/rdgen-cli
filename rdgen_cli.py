@@ -138,7 +138,7 @@ def parseBuildStageInfo(html):
         elif key == "platform":
             platform = val
         else:
-            print(f"Catched unexpected key in query: '{key}':'{val}'")
+            print(f"Caught unexpected key in query: '{key}':'{val}'")
 
     return stageInfo, filename, uuid, platform
 
