@@ -1,6 +1,6 @@
 {
   "platform": "windows",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "delayFix": "on",
   "exename": "MyApplication",
   "appname": "MyApplication",
